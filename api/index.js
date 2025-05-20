@@ -12,8 +12,34 @@ app.use(express.json());
 // Import our mockData
 const { sales, products, financeData } = require('./mockData');
 
-// Define routes
-app.get('/sales', (req, res) => {
+// Define routes - Make sure to include the full path
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Central Computers Demo API',
+    endpoints: {
+      sales: '/api/sales',
+      products: '/api/products',
+      finance: '/api/finance/reports',
+      dashboard: '/api/dashboard/summary'
+    }
+  });
+});
+
+app.get('/api', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Central Computers Demo API',
+    endpoints: {
+      sales: '/api/sales',
+      products: '/api/products',
+      finance: '/api/finance/reports',
+      dashboard: '/api/dashboard/summary'
+    }
+  });
+});
+
+app.get('/api/sales', (req, res) => {
   res.json({
     success: true,
     data: sales,
@@ -22,7 +48,7 @@ app.get('/sales', (req, res) => {
   });
 });
 
-app.get('/products', (req, res) => {
+app.get('/api/products', (req, res) => {
   res.json({
     success: true,
     data: products,
@@ -31,7 +57,7 @@ app.get('/products', (req, res) => {
   });
 });
 
-app.get('/finance/reports', (req, res) => {
+app.get('/api/finance/reports', (req, res) => {
   res.json({
     success: true,
     data: financeData,
@@ -39,7 +65,7 @@ app.get('/finance/reports', (req, res) => {
   });
 });
 
-app.get('/dashboard/summary', (req, res) => {
+app.get('/api/dashboard/summary', (req, res) => {
   // Calculate summary data
   const totalSales = sales.length;
   const paidSales = sales.filter(s => s.paymentStatus === 'paid').length;
@@ -62,22 +88,8 @@ app.get('/dashboard/summary', (req, res) => {
   });
 });
 
-// Root endpoint
-app.get('/', (req, res) => {
-  res.json({
-    success: true,
-    message: 'Central Computers Demo API',
-    endpoints: {
-      sales: '/api/sales',
-      products: '/api/products',
-      finance: '/api/finance/reports',
-      dashboard: '/api/dashboard/summary'
-    }
-  });
-});
-
 // Health check endpoint
-app.get('/health', (req, res) => {
+app.get('/api/health', (req, res) => {
   res.status(200).json({
     status: 'ok',
     service: 'central-computers-demo-api',
@@ -94,5 +106,5 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Export the Express app as the serverless function handler
+// For Vercel, we need to export the app as a module
 module.exports = app; 
