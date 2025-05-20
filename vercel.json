@@ -45,14 +45,18 @@
     },
     {
       "src": "/static/(.*)",
-      "dest": "/client/build/static/$1"
+      "dest": "client/build/static/$1"
+    },
+    {
+      "src": "/(favicon\\.ico|manifest\\.json|logo\\d+\\.png|asset-manifest\\.json)",
+      "dest": "client/build/$1"
     },
     {
       "handle": "filesystem"
     },
     {
       "src": "/(.*)",
-      "dest": "/client/build/index.html"
+      "dest": "client/build/index.html"
     }
   ],
   "env": {
