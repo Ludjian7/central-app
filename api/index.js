@@ -1,48 +1,86 @@
-// Vercel serverless function entry point
+// Simple API router for Vercel serverless functions
 const express = require('express');
 const cors = require('cors');
-const session = require('express-session');
-const path = require('path');
-const { mockData } = require('../server/models');
-const routes = require('../server/routes');
 
 // Initialize Express
 const app = express();
 
 // Middleware
-app.use(cors({
-  origin: process.env.VERCEL_URL || '*',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
-}));
-
+app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Simple session for Vercel serverless functions
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'demo_session_secret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 1000 * 60 * 60 * 24, // 1 day
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    httpOnly: true
-  }
-}));
+// Import our mockData
+const { sales, products, financeData } = require('./mockData');
 
-// Use the routes
-app.use('/', routes);
+// Define routes
+app.get('/sales', (req, res) => {
+  res.json({
+    success: true,
+    data: sales,
+    total: sales.length,
+    message: 'Sales retrieved successfully'
+  });
+});
+
+app.get('/products', (req, res) => {
+  res.json({
+    success: true,
+    data: products,
+    total: products.length,
+    message: 'Products retrieved successfully'
+  });
+});
+
+app.get('/finance/reports', (req, res) => {
+  res.json({
+    success: true,
+    data: financeData,
+    message: 'Financial reports generated successfully'
+  });
+});
+
+app.get('/dashboard/summary', (req, res) => {
+  // Calculate summary data
+  const totalSales = sales.length;
+  const paidSales = sales.filter(s => s.paymentStatus === 'paid').length;
+  const pendingSales = sales.filter(s => s.paymentStatus === 'pending').length;
+  const totalRevenue = sales.reduce((sum, sale) => sum + sale.total, 0);
+  const lowStockProducts = products.filter(p => p.stock < 10).length;
+  
+  res.json({
+    success: true,
+    data: {
+      totalSales,
+      paidSales,
+      pendingSales,
+      totalRevenue,
+      lowStockProducts,
+      recentSales: sales.slice(0, 5),
+      recentTransactions: financeData.recentTransactions.slice(0, 5)
+    },
+    message: 'Dashboard summary generated successfully'
+  });
+});
+
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Central Computers Demo API',
+    endpoints: {
+      sales: '/api/sales',
+      products: '/api/products',
+      finance: '/api/finance/reports',
+      dashboard: '/api/dashboard/summary'
+    }
+  });
+});
 
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'ok',
     service: 'central-computers-demo-api',
-    environment: 'vercel-serverless',
-    demoMode: 'active',
     timestamp: new Date().toISOString()
   });
 });
@@ -50,11 +88,9 @@ app.get('/health', (req, res) => {
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Error details:', err);
-  
   res.status(err.status || 500).json({
     success: false,
-    message: err.message || 'Internal Server Error',
-    error: process.env.NODE_ENV === 'production' ? 'Internal Server Error' : err.toString()
+    message: err.message || 'Internal Server Error'
   });
 });
 

@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/*.js",
+      "src": "api/index.js",
       "use": "@vercel/node"
     },
     {
@@ -12,48 +12,16 @@
   ],
   "routes": [
     {
-      "src": "/api/health",
-      "dest": "/api/health.js"
-    },
-    {
-      "src": "/api/sales",
-      "dest": "/api/sales.js"
-    },
-    {
-      "src": "/api/products",
-      "dest": "/api/products.js"
-    },
-    {
-      "src": "/api/finance/reports",
-      "dest": "/api/finance.js"
-    },
-    {
-      "src": "/api/dashboard/summary",
-      "dest": "/api/dashboard.js"
-    },
-    {
-      "src": "/api",
-      "dest": "/api/root.js"
-    },
-    {
       "src": "/api/(.*)",
       "dest": "/api/index.js"
     },
     {
-      "src": "/(.*\\.js)",
-      "dest": "/public/$1" 
+      "src": "/favicon.ico",
+      "dest": "/public/favicon.ico"
     },
     {
-      "src": "/(.*\\.json)",
-      "dest": "/public/$1"
-    },
-    {
-      "src": "/(.*\\.ico)",
-      "dest": "/public/$1"
-    },
-    {
-      "src": "/(.*\\.css)",
-      "dest": "/public/$1"
+      "src": "/manifest.json",
+      "dest": "/public/manifest.json"
     },
     {
       "handle": "filesystem"
@@ -63,19 +31,7 @@
       "dest": "/public/index.html"
     }
   ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Credentials", "value": "true" },
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
-        { "key": "Access-Control-Allow-Headers", "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" }
-      ]
-    }
-  ],
   "env": {
-    "NODE_ENV": "production",
-    "DEMO_MODE": "true"
+    "NODE_ENV": "production"
   }
 }

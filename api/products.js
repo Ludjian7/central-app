@@ -1,12 +1,12 @@
 // Products API endpoint
-const { mockData } = require('../server/models');
+const { products } = require('./mockData');
 
 module.exports = (req, res) => {
   // Return mock products data
   res.json({
     success: true,
-    data: mockData.products,
-    total: mockData.products.length,
+    data: products,
+    total: products.length,
     message: 'Products retrieved successfully'
   });
 }; 

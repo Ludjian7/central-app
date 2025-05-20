@@ -1,10 +1,10 @@
 // Finance API endpoint
-const { mockData } = require('../server/models');
+const { financeData } = require('./mockData');
 
 module.exports = (req, res) => {
   res.json({
     success: true,
-    data: mockData.financeData,
+    data: financeData,
     message: 'Financial reports generated successfully'
   });
 }; 
