@@ -3,60 +3,154 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Central Computers Management System Demo">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="manifest" href="/manifest.json">
   <title>Central Computers Demo</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       margin: 0;
       padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
       background-color: #f5f5f5;
     }
     .container {
-      text-align: center;
+      max-width: 1200px;
+      margin: 0 auto;
       padding: 2rem;
+    }
+    header {
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 1rem 2rem;
+      margin-bottom: 2rem;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #333;
+    }
+    .card {
       background-color: white;
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      max-width: 600px;
-      width: 100%;
+      padding: 2rem;
+      margin-bottom: 2rem;
     }
-    h1 {
+    h1, h2 {
       color: #333;
-      margin-bottom: 1rem;
     }
     p {
       color: #666;
       line-height: 1.6;
     }
-    .links {
+    .endpoints {
       margin-top: 2rem;
+    }
+    .endpoint-item {
+      background-color: #f9f9f9;
+      border-left: 4px solid #0070f3;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 0 4px 4px 0;
     }
     a {
       color: #0070f3;
       text-decoration: none;
-      margin: 0 0.5rem;
     }
     a:hover {
       text-decoration: underline;
     }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .feature {
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .feature h3 {
+      margin-top: 0;
+    }
+    footer {
+      margin-top: 3rem;
+      padding: 1.5rem;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
+  <header>
+    <div class="logo">Central Computers</div>
+  </header>
+
   <div class="container">
-    <h1>Central Computers Demo</h1>
-    <p>Welcome to the Central Computers Management System Demo.</p>
-    <p>This is a static fallback page.</p>
+    <div class="card">
+      <h1>Central Computers Management System</h1>
+      <p>Welcome to the Central Computers Management System Demo. This application showcases a simplified version of a computer store management system.</p>
+      <p>This demo uses mock data and demonstrates various features typically found in retail management software.</p>
+    </div>
+
+    <h2>Features</h2>
+    <div class="features">
+      <div class="feature">
+        <h3>Sales Management</h3>
+        <p>Track sales transactions, create invoices, and manage customer information.</p>
+      </div>
+      <div class="feature">
+        <h3>Inventory Tracking</h3>
+        <p>Monitor product stock levels, track prices, and manage product categories.</p>
+      </div>
+      <div class="feature">
+        <h3>Financial Reporting</h3>
+        <p>Generate reports on sales, revenue, expenses, and profit margins.</p>
+      </div>
+    </div>
+
+    <h2>API Endpoints</h2>
+    <p>This demo provides several API endpoints that return mock data:</p>
     
-    <div class="links">
-      <p>Try these API endpoints:</p>
-      <a href="/api/sales" target="_blank">/api/sales</a>
-      <a href="/api/products" target="_blank">/api/products</a>
-      <a href="/api/dashboard/summary" target="_blank">/api/dashboard/summary</a>
+    <div class="endpoints">
+      <div class="endpoint-item">
+        <strong>API Base</strong>: <a href="/api" target="_blank">/api</a>
+        <p>Overview of available API endpoints</p>
+      </div>
+      
+      <div class="endpoint-item">
+        <strong>Health Check</strong>: <a href="/api/health" target="_blank">/api/health</a>
+        <p>API health status information</p>
+      </div>
+      
+      <div class="endpoint-item">
+        <strong>Sales Data</strong>: <a href="/api/sales" target="_blank">/api/sales</a>
+        <p>List of mock sales transactions</p>
+      </div>
+
+      <div class="endpoint-item">
+        <strong>Products</strong>: <a href="/api/products" target="_blank">/api/products</a>
+        <p>List of product inventory</p>
+      </div>
+      
+      <div class="endpoint-item">
+        <strong>Finance Reports</strong>: <a href="/api/finance/reports" target="_blank">/api/finance/reports</a>
+        <p>Financial reporting data</p>
+      </div>
+
+      <div class="endpoint-item">
+        <strong>Dashboard Summary</strong>: <a href="/api/dashboard/summary" target="_blank">/api/dashboard/summary</a>
+        <p>Overview of key metrics</p>
+      </div>
     </div>
   </div>
+
+  <footer>
+    Central Computers Demo - For demonstration purposes only
+  </footer>
 </body>
 </html> 

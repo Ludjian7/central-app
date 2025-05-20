@@ -20,6 +20,18 @@
       "dest": "/api/sales.js"
     },
     {
+      "src": "/api/products",
+      "dest": "/api/products.js"
+    },
+    {
+      "src": "/api/finance/reports",
+      "dest": "/api/finance.js"
+    },
+    {
+      "src": "/api/dashboard/summary",
+      "dest": "/api/dashboard.js"
+    },
+    {
       "src": "/api",
       "dest": "/api/root.js"
     },
@@ -28,11 +40,38 @@
       "dest": "/api/index.js"
     },
     {
+      "src": "/(.*\\.js)",
+      "dest": "/public/$1" 
+    },
+    {
+      "src": "/(.*\\.json)",
+      "dest": "/public/$1"
+    },
+    {
+      "src": "/(.*\\.ico)",
+      "dest": "/public/$1"
+    },
+    {
+      "src": "/(.*\\.css)",
+      "dest": "/public/$1"
+    },
+    {
       "handle": "filesystem"
     },
     {
       "src": "/(.*)",
       "dest": "/public/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Credentials", "value": "true" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
+        { "key": "Access-Control-Allow-Headers", "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" }
+      ]
     }
   ],
   "env": {
