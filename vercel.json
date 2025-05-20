@@ -6,57 +6,24 @@
       "use": "@vercel/node"
     },
     {
-      "src": "package.json",
+      "src": "client/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "buildCommand": "npm run build",
-        "outputDirectory": "client/build"
+        "distDir": "build"
       }
     }
   ],
   "routes": [
     {
-      "src": "/api/sales",
-      "dest": "/api/handler.js"
-    },
-    {
-      "src": "/api/products",
-      "dest": "/api/handler.js"
-    },
-    {
-      "src": "/api/finance/reports",
-      "dest": "/api/handler.js"
-    },
-    {
-      "src": "/api/dashboard/summary",
-      "dest": "/api/handler.js"
-    },
-    {
-      "src": "/api/health",
-      "dest": "/api/handler.js"
-    },
-    {
-      "src": "/api",
-      "dest": "/api/handler.js"
-    },
-    {
       "src": "/api/(.*)",
       "dest": "/api/handler.js"
-    },
-    {
-      "src": "/static/(.*)",
-      "dest": "client/build/static/$1"
-    },
-    {
-      "src": "/(favicon\\.ico|manifest\\.json|logo\\d+\\.png|asset-manifest\\.json)",
-      "dest": "client/build/$1"
     },
     {
       "handle": "filesystem"
     },
     {
       "src": "/(.*)",
-      "dest": "client/build/index.html"
+      "dest": "/client/build/index.html"
     }
   ],
   "env": {
