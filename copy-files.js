@@ -1,95 +1,70 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 
-// Source directory is the parent folder
-const sourceDir = path.join(__dirname, '..');
-// Destination directory is the current folder
-const destDir = __dirname;
+console.log('Running copy-files script for Vercel deployment...');
 
-// Files to copy from client
-const clientFiles = [
-  {
-    source: 'client/src/pages/Sales/SaleDetail.js',
-    dest: 'client/src/pages/Sales/SaleDetail.js'
-  },
-  {
-    source: 'client/src/pages/Sales/SaleForm.js',
-    dest: 'client/src/pages/Sales/SaleForm.js'
-  },
-  {
-    source: 'client/src/pages/Finance/FinancialReport.js',
-    dest: 'client/src/pages/Finance/FinancialReport.js'
-  },
-  {
-    source: 'client/src/components/Layout/Layout.js',
-    dest: 'client/src/components/Layout/Layout.js'
-  }
-];
+// Define paths
+const clientBuildDir = path.join(__dirname, 'client', 'build');
+const publicDir = path.join(__dirname, 'public');
 
-// Files to copy from server
-const serverFiles = [
-  {
-    source: 'server/controllers/saleController.js',
-    dest: 'server/controllers/saleController.js'
-  },
-  {
-    source: 'server/controllers/financeController.js',
-    dest: 'server/controllers/financeController.js'
-  },
-  {
-    source: 'server/models/Sale.js',
-    dest: 'server/models/Sale.js'
-  }
-];
-
-// Create directory if it doesn't exist
-function ensureDirectoryExists(dirPath) {
-  const dirname = path.dirname(dirPath);
-  if (fs.existsSync(dirname)) {
-    return true;
-  }
-  ensureDirectoryExists(dirname);
-  fs.mkdirSync(dirname);
+// Ensure the client build directory exists
+if (!fs.existsSync(clientBuildDir)) {
+  console.error('Error: Client build directory does not exist!');
+  console.error('Make sure to run npm run build first.');
+  process.exit(1);
 }
 
-// Copy file from source to destination
-function copyFile(source, dest) {
-  try {
-    if (!fs.existsSync(source)) {
-      console.log(`Source file does not exist: ${source}`);
-      return false;
-    }
-    
-    ensureDirectoryExists(dest);
-    fs.copyFileSync(source, dest);
-    console.log(`Copied: ${source} -> ${dest}`);
-    return true;
-  } catch (error) {
-    console.error(`Error copying ${source} to ${dest}:`, error);
-    return false;
-  }
+// Create public directory if it doesn't exist
+if (!fs.existsSync(publicDir)) {
+  console.log('Creating public directory...');
+  fs.mkdirSync(publicDir);
 }
 
-// Main function to copy files
-function copyFiles() {
-  console.log('Copying client files...');
-  clientFiles.forEach(file => {
-    const sourcePath = path.join(sourceDir, file.source);
-    const destPath = path.join(destDir, file.dest);
-    copyFile(sourcePath, destPath);
-  });
-
-  console.log('\nCopying server files...');
-  serverFiles.forEach(file => {
-    const sourcePath = path.join(sourceDir, file.source);
-    const destPath = path.join(destDir, file.dest);
-    copyFile(sourcePath, destPath);
-  });
-
-  console.log('\nFile copying complete!');
+try {
+  // Copy client build files to public directory
+  console.log('Copying client build files to public directory...');
+  fs.copySync(clientBuildDir, publicDir);
+  console.log('Successfully copied client build files!');
+} catch (err) {
+  console.error('Error copying files:', err);
+  process.exit(1);
 }
 
-// Run the copy process
-copyFiles(); 
+// Create a simple vercel.json if it doesn't exist (as a backup)
+const vercelJsonPath = path.join(__dirname, 'vercel.json');
+if (!fs.existsSync(vercelJsonPath)) {
+  console.log('Creating vercel.json file...');
+  const vercelConfig = {
+    "version": 2,
+    "builds": [
+      {
+        "src": "server.js",
+        "use": "@vercel/node"
+      },
+      {
+        "src": "public/**",
+        "use": "@vercel/static"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest": "/server.js"
+      },
+      {
+        "handle": "filesystem"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/public/index.html"
+      }
+    ]
+  };
+
+  fs.writeFileSync(vercelJsonPath, JSON.stringify(vercelConfig, null, 2));
+  console.log('vercel.json file created.');
+}
+
+console.log('Copy-files script completed successfully!'); 

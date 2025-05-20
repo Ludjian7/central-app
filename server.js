@@ -82,8 +82,8 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server
-if (process.env.NODE_ENV !== 'production') {
+// Start server only if not in Vercel environment
+if (!process.env.VERCEL) {
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
@@ -91,4 +91,5 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
+// For Vercel serverless deployment
 module.exports = app; 
