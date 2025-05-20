@@ -53,11 +53,22 @@ app.use((req, res, next) => {
 });
 
 // Serve static files from the React app build directory
-app.use(express.static(path.join(__dirname, 'client/build')));
+// In Vercel, we'll use the public directory instead (files get copied there in the build step)
+if (process.env.VERCEL) {
+  // For Vercel deployment, serve from public
+  app.use(express.static(path.join(__dirname, 'public')));
+} else {
+  // For local development, serve from client/build
+  app.use(express.static(path.join(__dirname, 'client/build')));
+}
 
 // For any request that doesn't match a route, serve the React app
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+  const indexPath = process.env.VERCEL 
+    ? path.join(__dirname, 'public', 'index.html')
+    : path.join(__dirname, 'client/build', 'index.html');
+  
+  res.sendFile(indexPath);
 });
 
 // Health check
