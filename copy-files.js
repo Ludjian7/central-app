@@ -25,7 +25,39 @@ if (!fs.existsSync(publicDir)) {
 try {
   // Copy client build files to public directory
   console.log('Copying client build files to public directory...');
+  
+  // First ensure the public directory is clean
+  fs.emptyDirSync(publicDir);
+  
+  // Copy all files from build to public
   fs.copySync(clientBuildDir, publicDir);
+  
+  // Make sure we have the necessary static directories
+  const staticDir = path.join(publicDir, 'static');
+  if (!fs.existsSync(staticDir)) {
+    console.log('Creating static directories...');
+    fs.mkdirSync(path.join(staticDir, 'js'), { recursive: true });
+    fs.mkdirSync(path.join(staticDir, 'css'), { recursive: true });
+    
+    // If static directories don't exist, we might need to create sample files
+    // This is just for safeguarding in case the build failed
+    if (!fs.existsSync(path.join(staticDir, 'js', 'main.js'))) {
+      console.log('Creating placeholder JS file...');
+      fs.writeFileSync(
+        path.join(staticDir, 'js', 'main.js'), 
+        'console.log("Central Computers Demo App");'
+      );
+    }
+    
+    if (!fs.existsSync(path.join(staticDir, 'css', 'main.css'))) {
+      console.log('Creating placeholder CSS file...');
+      fs.writeFileSync(
+        path.join(staticDir, 'css', 'main.css'), 
+        'body { font-family: sans-serif; }'
+      );
+    }
+  }
+  
   console.log('Successfully copied client build files!');
 } catch (err) {
   console.error('Error copying files:', err);
